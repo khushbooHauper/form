@@ -612,7 +612,19 @@ export const Step4 = ({ formData, prev , next}) => {
       experience: prevState.experience.filter((edu, i) => i !== index)
     }));
   };
-    
+  const initialFormValues = {
+    name: '',
+    email: '',
+    password: '',
+    address: '',
+    city: '',
+    state: '',
+    bank: '',
+    accountNumber: '',
+    ifsc: '',
+    education: [{ courseName: "", university: "", percentage: "", passingYear: "" }],
+    experience: [{ company: "", designation: "", joiningDate: "", leavingDate: "" }],
+  };
   return (
     <div>
       {success ? (
@@ -622,18 +634,10 @@ export const Step4 = ({ formData, prev , next}) => {
         </div>
       ) : (
         <Formik
-          initialValues={{
-          name: formData.name || "",
-          email: formData.email || "",
-          password: formData.password || "",
-          address: formData.address || "",
-          city: formData.city || "",
-          state: formData.state || "",
-          bank: formData.bank || "",
-          accountNumber: formData.accountNumber || "",
-          ifsc: formData.ifsc || "",
-          education: formData.education || [{ courseName: "", university: "", percentage: "", passingYear: "" }],
-          experience: formData.experience || [{ company: "", designation: "", joiningDate: "", leavingDate: "" }],}}
+        initialValues={{
+          ...initialFormValues,
+          ...formData
+        }}
           validationSchema={experienceValidationSchema}
           onSubmit={(values, { setSubmitting }) => {
             experienceValidationSchema.validate(values)

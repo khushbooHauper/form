@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Modal,TextField } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Modal, TextField } from '@material-ui/core';
 import { deleteFormData, editFormData, userList } from './MultiStepFormSlice';
 import EditForm from './EditForm';
 import { Pagination } from '@material-ui/lab';
@@ -19,17 +19,13 @@ export const FormDataList = () => {
   const [formData, setFormData] = useState(null);
   const [page, setPage] = useState(1);
   const [displayList, setDisplayList] = useState(mylist);
-  const [deletekiyakya, setDeletekiyakya] = useState(false);
 
 
-  
   const ITEMS_PER_PAGE = 5;
+
   useEffect(() => {
-    if(deletekiyakya){
-      setDisplayList(mylist);
-    }
-    
-  }, [mylist,deletekiyakya]);
+    setDisplayList(mylist);
+  }, [mylist]);
 
   const handleSearch = (values) => {
     const searchQuery = values.search.toLowerCase();
@@ -59,14 +55,14 @@ export const FormDataList = () => {
     setFormData({ ...formData, index: mylist.indexOf(formData) });
   };
 
-  
+
   const handleSave = (formData) => {
     const updatedIndex = formData.index;
     dispatch(editFormData({ index: updatedIndex, updatedData: formData }));
     setEditMode(false);
     setFormData(null);
-    
-  
+
+
     // Update filtered array with edited form data
     setDisplayList(prevData => {
       const updatedData = [...prevData];
@@ -78,12 +74,11 @@ export const FormDataList = () => {
     setEditMode(false);
     setDeleteMode(false);
     setFormData(null);
-    
-  };
+ };
 
   const handleDelete = (user, index) => {
     setDeleteMode(true);
-    setFormData({ ...user, index }); 
+    setFormData({ ...user, index });
     console.log(user)
   };
 
@@ -95,19 +90,19 @@ export const FormDataList = () => {
     // Remove deleted item from filtered array
     const updatedList = mylist.filter((user) => user.index !== formData.index);
     setDisplayList(updatedList);
-    console.log(displayList,'displayList')
-    console.log(mylist,'mylist')
-    setDeletekiyakya(true)
+    console.log(displayList, 'displayList')
+    console.log(mylist, 'mylist')
+    
   };
 
 
 
- 
+
   return (
     <>
-    {/* <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /> */}
-    
-    <Formik
+      {/* <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /> */}
+
+      <Formik
         initialValues={{ search: '' }}
         validationSchema={validationSchema}
         onSubmit={handleSearch}
@@ -128,26 +123,26 @@ export const FormDataList = () => {
           </Form>
         )}
       </Formik>
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Address</TableCell>
-            <TableCell>City</TableCell>
-            <TableCell>State</TableCell>
-            <TableCell>Bank</TableCell>
-            <TableCell>Account Number</TableCell>
-            <TableCell>IFSC</TableCell>
-            <TableCell>education</TableCell>
-            <TableCell>experience</TableCell>
-            <TableCell>Edit</TableCell>
-            <TableCell>Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-        {displayList.slice(startIndex, endIndex).map((user, index) => (
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Address</TableCell>
+              <TableCell>City</TableCell>
+              <TableCell>State</TableCell>
+              <TableCell>Bank</TableCell>
+              <TableCell>Account Number</TableCell>
+              <TableCell>IFSC</TableCell>
+              <TableCell>education</TableCell>
+              <TableCell>experience</TableCell>
+              <TableCell>Edit</TableCell>
+              <TableCell>Delete</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {displayList.slice(startIndex, endIndex).map((user, index) => (
               <TableRow key={index}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
@@ -181,30 +176,30 @@ export const FormDataList = () => {
                   <Button onClick={() => handleEdit(user)}>Edit</Button>
                 </TableCell>
                 <TableCell>
-                  <Button onClick={() => handleDelete(user,index)}>Delete</Button>
+                  <Button onClick={() => handleDelete(user, index)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}
-        </TableBody>
-      </Table>
-      {editMode && (
-        <Modal open={editMode} onClose={handleCancel}>
-          <EditForm formData={formData} onSave={handleSave} onCancel={handleCancel} index={formData.index} />
-        </Modal>
-      )}
-      {deleteMode && (
-        <Modal open={deleteMode} onClose={handleCancel}>
-          <div style={{ backgroundColor: 'white', padding: '2rem' ,width:'600px',position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%)'}}>
-            <p align="center">Are you sure you want to delete this form data?</p>
-            <div align="center">
-            <Button onClick={handleConfirmDelete}>Yes</Button>
-            <Button onClick={handleCancel}>No</Button>
+          </TableBody>
+        </Table>
+        {editMode && (
+          <Modal open={editMode} onClose={handleCancel}>
+            <EditForm formData={formData} onSave={handleSave} onCancel={handleCancel} index={formData.index} />
+          </Modal>
+        )}
+        {deleteMode && (
+          <Modal open={deleteMode} onClose={handleCancel}>
+            <div style={{ backgroundColor: 'white', padding: '2rem', width: '600px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+              <p align="center">Are you sure you want to delete this form data?</p>
+              <div align="center">
+                <Button onClick={handleConfirmDelete}>Yes</Button>
+                <Button onClick={handleCancel}>No</Button>
+              </div>
             </div>
-          </div>
-        </Modal>
-      )}
-    </TableContainer>
-     <Pagination count={Math.ceil(mylist.length / ITEMS_PER_PAGE)} page={page} onChange={handleChangePage} color="secondary"/>
-     </>
+          </Modal>
+        )}
+      </TableContainer>
+      <Pagination count={Math.ceil(mylist.length / ITEMS_PER_PAGE)} page={page} onChange={handleChangePage} color="secondary" />
+    </>
   );
 };
